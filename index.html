@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CreatorBox - Free Social Media Tools</title>
+    
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     
-    </head>
+    <script src="https://quge5.com/88/tag.min.js" data-zone="245454" async data-cfasync="false"></script>
+</head>
 <body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
 
     <header class="bg-white shadow-sm py-4 px-6 flex justify-between items-center border-b border-gray-100">
@@ -137,15 +139,9 @@
             });
         }
 
-        // ==========================================================
-        // MONETAG SMARTLINK WRAPPER
-        // This function intercepts clicks on "Generate" buttons to maximize CPM
-        // ==========================================================
+        // Action wrapper for monetization extensions
         function triggerAction(callbackFunction) {
-            // Uncomment the line below and swap with your Monetag SmartLink URL 
-            // window.open('https://your-monetag-smartlink-url.com', '_blank');
-            
-            // Runs the local tool computation immediately
+            // Optional: window.open('https://your-monetag-smartlink-url.com', '_blank');
             callbackFunction();
         }
 
