@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CreatorBox - Free Social Media Tools</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    
+    </head>
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
+
+    <header class="bg-white shadow-sm py-4 px-6 flex justify-between items-center border-b border-gray-100">
+        <h1 class="text-xl font-bold text-indigo-600 tracking-wide">🚀 CreatorBox</h1>
+        <span class="text-xs font-semibold bg-green-100 text-green-700 px-2.5 py-1 rounded-full">100% Free Tools</span>
+    </header>
+
+    <div class="w-full flex justify-center justify-items-center py-4 bg-gray-100 border-b border-gray-200">
+        <div class="bg-gray-200 text-gray-500 text-xs w-[728px] h-[90px] flex items-center justify-center border border-dashed border-gray-400">
+            [Monetag In-Page Push Banner / Vignette Area]
+        </div>
+    </div>
+
+    <main class="flex-grow max-w-6xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
+        
+        <aside class="lg:col-span-1 bg-white p-4 rounded-xl shadow-sm h-fit space-y-2">
+            <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Available Tools</h2>
+            <button onclick="switchTool('caption')" id="btn-caption" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition bg-indigo-50 text-indigo-700">✍️ Caption Generator</button>
+            <button onclick="switchTool('hashtag')" id="btn-hashtag" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100">#️ Hashtag Finder</button>
+            <button onclick="switchTool('counter')" id="btn-counter" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100">📊 Character Counter</button>
+            
+            <div class="pt-6 flex justify-center">
+                <div class="bg-indigo-50 text-indigo-900 text-xs p-4 rounded-lg border border-indigo-100 text-center">
+                    <p class="font-bold mb-1">Need More Reach?</p>
+                    <p class="text-gray-600">Use our free tools daily to optimize your viral content strategy.</p>
+                </div>
+            </div>
+        </aside>
+
+        <section class="lg:col-span-3 bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+            
+            <div id="tool-caption" class="tool-content space-y-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">AI-Style Caption Generator</h2>
+                    <p class="text-sm text-gray-500">Generate engaging social media captions instantly.</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">What is your post about?</label>
+                    <input type="text" id="caption-topic" placeholder="e.g., morning coffee routine, starting a business" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tone</label>
+                    <select id="caption-tone" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <option value="witty">Witty & Funny</option>
+                        <option value="motivational">Motivational</option>
+                        <option value="informative">Informative</option>
+                    </select>
+                </div>
+                <button onclick="triggerAction(generateCaption)" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition shadow-md cursor-pointer">
+                    Generate Caption ✨
+                </button>
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Result:</label>
+                    <textarea id="caption-output" readonly rows="4" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg resize-none text-gray-700" placeholder="Your generated caption will appear here..."></textarea>
+                </div>
+            </div>
+
+            <div id="tool-hashtag" class="tool-content space-y-4 hidden">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">Trending Hashtag Finder</h2>
+                    <p class="text-sm text-gray-500">Get the best hashtags to boost your reach.</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Enter your niche keyword:</label>
+                    <input type="text" id="hashtag-keyword" placeholder="e.g., fitness, travel, tech" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                </div>
+                <button onclick="triggerAction(findHashtags)" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition shadow-md cursor-pointer">
+                    Find Hashtags 🔍
+                </button>
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Trending Tags:</label>
+                    <div id="hashtag-output" class="p-4 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 min-h-[100px] flex flex-wrap gap-2 items-center justify-center">
+                        <span class="text-sm text-gray-400">Hashtags will generate here...</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tool-counter" class="tool-content space-y-4 hidden">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">Smart Text Counter</h2>
+                    <p class="text-sm text-gray-500">Check limits for Twitter/X, Instagram, and LinkedIn.</p>
+                </div>
+                <textarea id="counter-input" oninput="countText()" rows="6" placeholder="Type or paste your content here..." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none resize-none"></textarea>
+                <div class="grid grid-cols-3 gap-4 text-center">
+                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                        <div id="char-count" class="text-xl font-bold text-indigo-600">0</div>
+                        <div class="text-xs text-gray-500">Characters</div>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                        <div id="word-count" class="text-xl font-bold text-indigo-600">0</div>
+                        <div class="text-xs text-gray-500">Words</div>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                        <div id="x-limit" class="text-xl font-bold text-green-600">280</div>
+                        <div class="text-xs text-gray-500">X / Twitter Left</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-gray-100">
+                ⚠️ <span class="text-xs text-gray-400 uppercase tracking-wide">Website Notice</span>
+                <div class="bg-gray-100 text-gray-400 text-xs w-full h-[60px] flex items-center justify-center border border-dashed border-gray-300 rounded mt-2">
+                    [Monetag In-Page Push / Alternative Placement Container]
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 py-4 text-center text-xs text-gray-500">
+        &copy; 2026 CreatorBox Tools Hub. All rights reserved. Keep creating!
+    </footer>
+
+    <script>
+        // Tab switching logic
+        function switchTool(toolId) {
+            document.querySelectorAll('.tool-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tool-${toolId}`).classList.remove('hidden');
+            
+            // Adjust active tab styles
+            ['caption', 'hashtag', 'counter'].forEach(id => {
+                const btn = document.getElementById(`btn-${id}`);
+                if(id === toolId) {
+                    btn.className = "w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition bg-indigo-50 text-indigo-700";
+                } else {
+                    btn.className = "w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100";
+                }
+            });
+        }
+
+        // ==========================================================
+        // MONETAG SMARTLINK WRAPPER
+        // This function intercepts clicks on "Generate" buttons to maximize CPM
+        // ==========================================================
+        function triggerAction(callbackFunction) {
+            // Uncomment the line below and swap with your Monetag SmartLink URL 
+            // window.open('https://your-monetag-smartlink-url.com', '_blank');
+            
+            // Runs the local tool computation immediately
+            callbackFunction();
+        }
+
+        // TOOL 1: Caption Logic
+        function generateCaption() {
+            const topic = document.getElementById('caption-topic').value || "Routine";
+            const tone = document.getElementById('caption-tone').value;
+            const output = document.getElementById('caption-output');
+            
+            const templates = {
+                witty: [`Honestly, just putting 100% of my energy into ${topic} today. ☕✨`, `Plot twist: ${topic} actually worked out perfectly.`, `Current status: crushing ${topic}. Proceed with caution.`],
+                motivational: [`Consistency is key. Focus your mind on ${topic} and watch things change. 🙌`, `The grind never stops. Today's mission: ${topic}. Let's get it.`, `Small steps daily lead to big changes. Start with ${topic}.`],
+                informative: [`Did you know? ${topic} is one of the most effective strategies for growth right now.`, `Breaking down ${topic} into simple, actionable steps for beginners.`, `Here is exactly what you need to know about ${topic} this week.`]
+            };
+
+            const randomIdx = Math.floor(Math.random() * 3);
+            output.value = templates[tone][randomIdx];
+        }
+
+        // TOOL 2: Hashtag Logic
+        function findHashtags() {
+            const keyword = document.getElementById('hashtag-keyword').value.trim().toLowerCase() || "marketing";
+            const outputDiv = document.getElementById('hashtag-output');
+            
+            const baseTags = [`#${keyword}`, `#${keyword}life`, `#${keyword}community`, `#trending`, `#viral`, `#explorepage`, `#creators`, `#fyp`];
+            
+            outputDiv.innerHTML = '';
+            baseTags.forEach(tag => {
+                const badge = document.createElement('span');
+                badge.className = "bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-1.5 rounded cursor-pointer hover:bg-indigo-200 transition";
+                badge.innerText = tag;
+                badge.onclick = () => {
+                    navigator.clipboard.writeText(tag);
+                    alert(`Copied: ${tag}`);
+                };
+                outputDiv.appendChild(badge);
+            });
+        }
+
+        // TOOL 3: Counter Logic
+        function countText() {
+            const text = document.getElementById('counter-input').value;
+            const charCount = text.length;
+            const wordCount = text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
+            
+            document.getElementById('char-count').innerText = charCount;
+            document.getElementById('word-count').innerText = wordCount;
+            
+            const xLeft = 280 - charCount;
+            const xElement = document.getElementById('x-limit');
+            xElement.innerText = xLeft;
+            
+            if(xLeft < 0) {
+                xElement.className = "text-xl font-bold text-red-600";
+            } else {
+                xElement.className = "text-xl font-bold text-green-600";
+            }
+        }
+    </script>
+</body>
+</html>
