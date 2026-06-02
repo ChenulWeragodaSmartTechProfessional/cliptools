@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CreatorBox - Free Social Media Tools</title>
+    <title>CreatorBox - Free Social Media & Creator Tools</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     
@@ -16,12 +16,6 @@
         <span class="text-xs font-semibold bg-green-100 text-green-700 px-2.5 py-1 rounded-full">100% Free Tools</span>
     </header>
 
-    <div class="w-full flex justify-center justify-items-center py-4 bg-gray-100 border-b border-gray-200">
-        <div class="bg-gray-200 text-gray-500 text-xs w-[728px] h-[90px] flex items-center justify-center border border-dashed border-gray-400">
-            [Monetag In-Page Push Banner / Vignette Area]
-        </div>
-    </div>
-
     <main class="flex-grow max-w-6xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
         
         <aside class="lg:col-span-1 bg-white p-4 rounded-xl shadow-sm h-fit space-y-2">
@@ -29,16 +23,19 @@
             <button onclick="switchTool('caption')" id="btn-caption" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition bg-indigo-50 text-indigo-700">✍️ Caption Generator</button>
             <button onclick="switchTool('hashtag')" id="btn-hashtag" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100">#️ Hashtag Finder</button>
             <button onclick="switchTool('counter')" id="btn-counter" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100">📊 Character Counter</button>
+            <button onclick="switchTool('qr')" id="btn-qr" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100">📷 QR Code Generator</button>
+            <button onclick="switchTool('case')" id="btn-case" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100">🔤 Text Case Converter</button>
+            <button onclick="switchTool('slug')" id="btn-slug" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100">🔗 URL Slug Generator</button>
             
             <div class="pt-6 flex justify-center">
-                <div class="bg-indigo-50 text-indigo-900 text-xs p-4 rounded-lg border border-indigo-100 text-center">
-                    <p class="font-bold mb-1">Need More Reach?</p>
-                    <p class="text-gray-600">Use our free tools daily to optimize your viral content strategy.</p>
+                <div class="bg-indigo-50 text-indigo-900 text-xs p-4 rounded-lg border border-indigo-100 text-center w-full">
+                    <p class="font-bold mb-1">Bookmark Us! ⭐</p>
+                    <p class="text-gray-600">Free digital utility kit updated weekly for creators.</p>
                 </div>
             </div>
         </aside>
 
-        <section class="lg:col-span-3 bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+        <section class="lg:col-span-3 bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between min-h-[500px]">
             
             <div id="tool-caption" class="tool-content space-y-4">
                 <div>
@@ -108,17 +105,59 @@
                 </div>
             </div>
 
-            <div class="mt-8 pt-6 border-t border-gray-100">
-                ⚠️ <span class="text-xs text-gray-400 uppercase tracking-wide">Website Notice</span>
-                <div class="bg-gray-100 text-gray-400 text-xs w-full h-[60px] flex items-center justify-center border border-dashed border-gray-300 rounded mt-2">
-                    [Monetag In-Page Push / Alternative Placement Container]
+            <div id="tool-qr" class="tool-content space-y-4 hidden">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">Instant QR Code Generator</h2>
+                    <p class="text-sm text-gray-500">Convert links, social profiles, or text into a clean QR code.</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Enter URL or text:</label>
+                    <input type="text" id="qr-input" placeholder="https://example.com/your-profile" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                </div>
+                <button onclick="triggerAction(generateQRCode)" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition shadow-md cursor-pointer">
+                    Generate QR Code 📷
+                </button>
+                <div id="qr-result-box" class="mt-4 flex flex-col items-center justify-center p-4 bg-gray-50 border border-gray-200 rounded-lg hidden">
+                    <img id="qr-image" src="" alt="QR Code" class="shadow-md rounded border bg-white p-2">
+                    <p class="text-xs text-gray-400 mt-2">Right click or hold image to save</p>
+                </div>
+            </div>
+
+            <div id="tool-case" class="tool-content space-y-4 hidden">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">Text Case Converter</h2>
+                    <p class="text-sm text-gray-500">Quickly format headings or taglines into different styles.</p>
+                </div>
+                <textarea id="case-input" rows="4" placeholder="Enter your text here..." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none resize-none"></textarea>
+                <div class="grid grid-cols-3 gap-2">
+                    <button onclick="triggerAction(() => convertCase('upper'))" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-3 rounded text-sm transition cursor-pointer">UPPERCASE</button>
+                    <button onclick="triggerAction(() => convertCase('lower'))" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-3 rounded text-sm transition cursor-pointer">lowercase</button>
+                    <button onclick="triggerAction(() => convertCase('title'))" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-3 rounded text-sm transition cursor-pointer">Title Case</button>
+                </div>
+            </div>
+
+            <div id="tool-slug" class="tool-content space-y-4 hidden">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">URL Slug Generator</h2>
+                    <p class="text-sm text-gray-500">Transform article titles or link descriptors into clean web slugs.</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Enter post title:</label>
+                    <input type="text" id="slug-input" placeholder="10 Simple Marketing Tools For 2026!" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                </div>
+                <button onclick="triggerAction(generateSlug)" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition shadow-md cursor-pointer">
+                    Make Web Slug 🔗
+                </button>
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Generated Slug:</label>
+                    <input type="text" id="slug-output" readonly class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-indigo-600 font-mono text-sm">
                 </div>
             </div>
 
         </section>
     </main>
 
-    <footer class="bg-white border-t border-gray-200 py-4 text-center text-xs text-gray-500">
+    <footer class="bg-white border-t border-gray-200 py-4 text-center text-xs text-gray-500 mt-6">
         &copy; 2026 CreatorBox Tools Hub. All rights reserved. Keep creating!
     </footer>
 
@@ -129,19 +168,20 @@
             document.getElementById(`tool-${toolId}`).classList.remove('hidden');
             
             // Adjust active tab styles
-            ['caption', 'hashtag', 'counter'].forEach(id => {
+            ['caption', 'hashtag', 'counter', 'qr', 'case', 'slug'].forEach(id => {
                 const btn = document.getElementById(`btn-${id}`);
-                if(id === toolId) {
-                    btn.className = "w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition bg-indigo-50 text-indigo-700";
-                } else {
-                    btn.className = "w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100";
+                if(btn) {
+                    if(id === toolId) {
+                        btn.className = "w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition bg-indigo-50 text-indigo-700";
+                    } else {
+                        btn.className = "w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100";
+                    }
                 }
             });
         }
 
         // Action wrapper for monetization extensions
         function triggerAction(callbackFunction) {
-            // Optional: window.open('https://your-monetag-smartlink-url.com', '_blank');
             callbackFunction();
         }
 
@@ -199,6 +239,57 @@
             } else {
                 xElement.className = "text-xl font-bold text-green-600";
             }
+        }
+
+        // TOOL 4: QR Code Generator Logic
+        function generateQRCode() {
+            const data = document.getElementById('qr-input').value.trim();
+            const resultBox = document.getElementById('qr-result-box');
+            const qrImage = document.getElementById('qr-image');
+            
+            if(!data) {
+                alert("Please enter a link or text first!");
+                return;
+            }
+            
+            // Encodes the string and calls a safe external QR image generator API
+            qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=170x170&data=${encodeURIComponent(data)}`;
+            resultBox.classList.remove('hidden');
+        }
+
+        // TOOL 5: Text Case Converter Logic
+        function convertCase(type) {
+            const inputField = document.getElementById('case-input');
+            let text = inputField.value;
+            
+            if(!text.trim()) return;
+
+            if(type === 'upper') {
+                inputField.value = text.toUpperCase();
+            } else if(type === 'lower') {
+                inputField.value = text.toLowerCase();
+            } else if(type === 'title') {
+                inputField.value = text.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+            }
+        }
+
+        // TOOL 6: Slug Generator Logic
+        function generateSlug() {
+            const input = document.getElementById('slug-input').value;
+            const output = document.getElementById('slug-output');
+            
+            if(!input.trim()) {
+                alert("Please type a title description first!");
+                return;
+            }
+
+            const slug = input.toLowerCase()
+                              .trim()
+                              .replace(/[^\w\s-]/g, '')
+                              .replace(/[\s_-]+/g, '-')
+                              .replace(/^-+|-+$/g, '');
+            
+            output.value = slug;
         }
     </script>
 </body>
