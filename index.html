@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,169 +23,216 @@
             user-select: text;
         }
     </style>
+    
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-950 dark:text-gray-100 font-sans min-h-screen flex flex-col transition-colors duration-200">
 
-    <div id="toast-notification" class="fixed bottom-5 right-5 bg-gray-900 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-xl transition-all duration-300 opacity-0 transform translate-y-2 pointer-events-none z-50"></div>
+    <div id="toast-notification" class="fixed bottom-5 right-5 bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900 text-xs font-semibold px-4 py-2.5 rounded-xl shadow-xl transition-all duration-300 opacity-0 transform translate-y-2 pointer-events-none z-50"></div>
 
-    <header class="bg-white shadow-sm py-3 px-6 flex justify-between items-center border-b border-gray-100">
+    <header class="bg-white dark:bg-gray-900 shadow-sm py-3 px-6 flex justify-between items-center border-b border-gray-100 dark:border-gray-800 transition-colors duration-200">
         <a href="#" class="flex items-center gap-2">
-            <img src="logo.png" alt="CreatorBox Logo" class="h-9 w-auto object-contain">
+            <img src="logo.png" alt="CreatorBox Logo" class="h-9 w-auto object-contain dark:invert">
         </a>
-        <span class="text-xs font-semibold bg-green-100 text-green-700 px-2.5 py-1 rounded-full">100% Free Tools</span>
+        <div class="flex items-center gap-4">
+            <button id="theme-toggle" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition cursor-pointer min-w-12 min-h-12 flex items-center justify-center text-lg" aria-label="Toggle Dark Mode">
+                <span class="dark:hidden">🌙</span>
+                <span class="hidden dark:inline">☀️</span>
+            </button>
+            <span class="text-xs font-semibold bg-green-100 text-green-700 dark:bg-green-950/50 dark:text-green-400 px-2.5 py-1 rounded-full whitespace-nowrap">100% Free Tools</span>
+        </div>
     </header>
 
     <main class="flex-grow max-w-6xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
         
-        <aside class="lg:col-span-1 bg-white p-4 rounded-xl shadow-sm h-fit space-y-2">
-            <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Available Tools</h2>
-            <button data-tool="caption" id="btn-caption" class="tool-trigger w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition bg-indigo-50 text-indigo-700">✍️ Caption Generator</button>
-            <button data-tool="hashtag" id="btn-hashtag" class="tool-trigger w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100">#️ Hashtag Finder</button>
-            <button data-tool="counter" id="btn-counter" class="tool-trigger w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100">📊 Character Counter</button>
-            <button data-tool="qr" id="btn-qr" class="tool-trigger w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100">📷 QR Code Generator</button>
-            <button data-tool="case" id="btn-case" class="tool-trigger w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100">🔤 Text Case Converter</button>
-            <button data-tool="slug" id="btn-slug" class="tool-trigger w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100">🔗 URL Slug Generator</button>
-            
-            <div class="pt-6 flex justify-center">
-                <div class="bg-indigo-50 text-indigo-900 text-xs p-4 rounded-lg border border-indigo-100 text-center w-full">
-                    <p class="font-bold mb-1">Bookmark Us! ⭐</p>
-                    <p class="text-gray-600">Free digital utility kit updated weekly for creators.</p>
+        <aside class="lg:col-span-1 flex flex-col gap-4">
+            <div class="bg-white dark:bg-gray-900 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 space-y-1">
+                <h2 class="text-sm font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3 px-1">Available Tools</h2>
+                <button data-tool="caption" id="btn-caption" class="tool-trigger w-full text-left px-4 py-3 min-h-[48px] rounded-lg font-medium text-sm transition bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-400 flex items-center justify-between">
+                    <span>✍️ Caption Generator</span> <kbd class="hidden sm:inline-block text-[10px] opacity-60 bg-gray-200/50 dark:bg-gray-800 px-1.5 py-0.5 rounded">1</kbd>
+                </button>
+                <button data-tool="hashtag" id="btn-hashtag" class="tool-trigger w-full text-left px-4 py-3 min-h-[48px] rounded-lg font-medium text-sm transition text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-between">
+                    <span>#️ Hashtag Finder</span> <kbd class="hidden sm:inline-block text-[10px] opacity-60 bg-gray-200/50 dark:bg-gray-800 px-1.5 py-0.5 rounded">2</kbd>
+                </button>
+                <button data-tool="counter" id="btn-counter" class="tool-trigger w-full text-left px-4 py-3 min-h-[48px] rounded-lg font-medium text-sm transition text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-between">
+                    <span>📊 Character Counter</span> <kbd class="hidden sm:inline-block text-[10px] opacity-60 bg-gray-200/50 dark:bg-gray-800 px-1.5 py-0.5 rounded">3</kbd>
+                </button>
+                <button data-tool="qr" id="btn-qr" class="tool-trigger w-full text-left px-4 py-3 min-h-[48px] rounded-lg font-medium text-sm transition text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-between">
+                    <span>📷 QR Code Generator</span> <kbd class="hidden sm:inline-block text-[10px] opacity-60 bg-gray-200/50 dark:bg-gray-800 px-1.5 py-0.5 rounded">4</kbd>
+                </button>
+                <button data-tool="case" id="btn-case" class="tool-trigger w-full text-left px-4 py-3 min-h-[48px] rounded-lg font-medium text-sm transition text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-between">
+                    <span>🔤 Text Case Converter</span> <kbd class="hidden sm:inline-block text-[10px] opacity-60 bg-gray-200/50 dark:bg-gray-800 px-1.5 py-0.5 rounded">5</kbd>
+                </button>
+                <button data-tool="slug" id="btn-slug" class="tool-trigger w-full text-left px-4 py-3 min-h-[48px] rounded-lg font-medium text-sm transition text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-between">
+                    <span>🔗 URL Slug Generator</span> <kbd class="hidden sm:inline-block text-[10px] opacity-60 bg-gray-200/50 dark:bg-gray-800 px-1.5 py-0.5 rounded">6</kbd>
+                </button>
+            </div>
+
+            <div class="bg-white dark:bg-gray-900 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 space-y-2">
+                <h2 class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider px-1">⚡ Hotkeys Legend</h2>
+                <div class="text-[11px] space-y-1.5 text-gray-600 dark:text-gray-400 font-mono px-1">
+                    <div class="flex justify-between items-center"><span class="font-sans">Switch Tools</span> <span class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-gray-800 dark:text-gray-200 font-bold">1 - 6</span></div>
+                    <div class="flex justify-between items-center"><span class="font-sans">Copy Results</span> <span class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-gray-800 dark:text-gray-200 font-bold">Ctrl/Cmd + C</span></div>
+                    <div class="flex justify-between items-center"><span class="font-sans">Clear Inputs</span> <span class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-gray-800 dark:text-gray-200 font-bold">Esc</span></div>
                 </div>
+            </div>
+
+            <div class="bg-indigo-50 dark:bg-indigo-950/40 text-indigo-900 dark:text-indigo-300 text-xs p-4 rounded-lg border border-indigo-100 dark:border-indigo-900/60 text-center">
+                <p class="font-bold mb-1">Bookmark Us! ⭐</p>
+                <p class="text-gray-600 dark:text-gray-400">Free digital utility kit updated weekly for creators.</p>
             </div>
         </aside>
 
-        <section class="lg:col-span-3 bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between min-h-[500px]">
+        <section class="lg:col-span-3 bg-white dark:bg-gray-900 p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col justify-between min-h-[500px] transition-colors duration-200">
             
             <div id="tool-caption" class="tool-content space-y-4">
                 <div>
-                    <h2 class="text-2xl font-bold text-gray-900">AI-Style Caption Generator</h2>
-                    <p class="text-sm text-gray-500">Generate engaging social media captions instantly.</p>
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">AI-Style Caption Generator</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Generate engaging social media captions instantly.</p>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">What is your post about?</label>
-                    <input type="text" id="caption-topic" placeholder="e.g., morning coffee routine, starting a business" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    <label for="caption-topic" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">What is your post about?</label>
+                    <input type="text" id="caption-topic" placeholder="e.g., morning coffee routine, starting a business" class="w-full min-h-[48px] px-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Tone</label>
-                    <select id="caption-tone" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tone</label>
+                    <select id="caption-tone" class="w-full min-h-[48px] px-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                         <option value="witty">Witty & Funny</option>
                         <option value="motivational">Motivational</option>
                         <option value="informative">Informative</option>
                     </select>
                 </div>
-                <button id="action-generate-caption" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition shadow-md cursor-pointer">
+                <button id="action-generate-caption" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold min-h-[48px] py-3 px-4 rounded-lg transition shadow-md cursor-pointer flex items-center justify-center">
                     Generate Caption ✨
                 </button>
                 <div class="mt-4 relative">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Result:</label>
-                    <textarea id="caption-output" readonly rows="4" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg resize-none text-gray-700" placeholder="Your generated caption will appear here..."></textarea>
-                    <button id="copy-caption-btn" class="absolute top-8 right-3 bg-white border border-gray-200 shadow-sm hover:bg-gray-50 text-xs px-2.5 py-1 rounded-md transition font-medium text-gray-600">Copy</button>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Result:</label>
+                    <textarea id="caption-output" readonly rows="4" class="w-full p-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-lg resize-none text-gray-700 dark:text-gray-300" placeholder="Your generated caption will appear here..."></textarea>
+                    <button id="copy-caption-btn" class="absolute top-8 right-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 text-xs px-3 py-1.5 min-h-[32px] rounded-md transition font-medium text-gray-600 dark:text-gray-300">Copy</button>
                 </div>
             </div>
 
             <div id="tool-hashtag" class="tool-content space-y-4 hidden">
                 <div>
-                    <h2 class="text-2xl font-bold text-gray-900">Trending Hashtag Finder</h2>
-                    <p class="text-sm text-gray-500">Get the best hashtags to boost your reach.</p>
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Trending Hashtag Finder</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Get the best hashtags to boost your reach.</p>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Enter your niche keyword:</label>
-                    <input type="text" id="hashtag-keyword" placeholder="e.g., fitness, travel, tech" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    <label for="hashtag-keyword" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Enter your niche keyword:</label>
+                    <input type="text" id="hashtag-keyword" placeholder="e.g., fitness, travel, tech" class="w-full min-h-[48px] px-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                 </div>
-                <button id="action-find-hashtags" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition shadow-md cursor-pointer">
+                <button id="action-find-hashtags" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold min-h-[48px] py-3 px-4 rounded-lg transition shadow-md cursor-pointer flex items-center justify-center">
                     Find Hashtags 🔍
                 </button>
                 <div class="mt-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Trending Tags (Click to copy individual tag):</label>
-                    <div id="hashtag-output" class="p-4 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 min-h-[100px] flex flex-wrap gap-2 items-center justify-center">
-                        <span class="text-sm text-gray-400">Hashtags will generate here...</span>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Trending Tags (Click to copy individual tag):</label>
+                    <div id="hashtag-output" class="p-4 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-lg text-gray-600 dark:text-gray-400 min-h-[100px] flex flex-wrap gap-2 items-center justify-center">
+                        <span class="text-sm text-gray-400 dark:text-gray-600">Hashtags will generate here...</span>
                     </div>
                 </div>
             </div>
 
             <div id="tool-counter" class="tool-content space-y-4 hidden">
                 <div>
-                    <h2 class="text-2xl font-bold text-gray-900">Smart Text Counter</h2>
-                    <p class="text-sm text-gray-500">Check limits for Twitter/X, Instagram, and LinkedIn.</p>
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Smart Text Counter</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Check limits for Twitter/X, Instagram, and LinkedIn.</p>
                 </div>
-                <textarea id="counter-input" rows="6" placeholder="Type or paste your content here..." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none resize-none"></textarea>
-                <div class="grid grid-cols-3 gap-4 text-center">
-                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
-                        <div id="char-count" class="text-xl font-bold text-indigo-600">0</div>
-                        <div class="text-xs text-gray-500">Characters</div>
+                <textarea id="counter-input" rows="6" placeholder="Type or paste your content here..." class="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none resize-none"></textarea>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                    <div class="bg-gray-50 dark:bg-gray-950 p-3 rounded-lg border border-gray-100 dark:border-gray-800">
+                        <div id="char-count" class="text-xl font-bold text-indigo-600 dark:text-indigo-400">0</div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400">Characters</div>
                     </div>
-                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
-                        <div id="word-count" class="text-xl font-bold text-indigo-600">0</div>
-                        <div class="text-xs text-gray-500">Words</div>
+                    <div class="bg-gray-50 dark:bg-gray-950 p-3 rounded-lg border border-gray-100 dark:border-gray-800">
+                        <div id="word-count" class="text-xl font-bold text-indigo-600 dark:text-indigo-400">0</div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400">Words</div>
                     </div>
-                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
-                        <div id="x-limit" class="text-xl font-bold text-green-600">280</div>
-                        <div class="text-xs text-gray-500">X / Twitter Left</div>
+                    <div class="bg-gray-50 dark:bg-gray-950 p-3 rounded-lg border border-gray-100 dark:border-gray-800">
+                        <div id="x-limit" class="text-xl font-bold text-green-600 dark:text-green-400">280</div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400">X / Twitter Left</div>
                     </div>
                 </div>
             </div>
 
             <div id="tool-qr" class="tool-content space-y-4 hidden">
                 <div>
-                    <h2 class="text-2xl font-bold text-gray-900">Instant QR Code Generator</h2>
-                    <p class="text-sm text-gray-500">Convert links, social profiles, or text into a clean QR code.</p>
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Instant QR Code Generator</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Convert links, social profiles, or text into a clean QR code.</p>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Enter URL or text:</label>
-                    <input type="text" id="qr-input" placeholder="https://example.com/your-profile" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    <label for="qr-input" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Enter URL or text:</label>
+                    <input type="text" id="qr-input" placeholder="https://example.com/your-profile" class="w-full min-h-[48px] px-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                 </div>
-                <button id="action-generate-qr" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition shadow-md cursor-pointer">
+                <button id="action-generate-qr" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold min-h-[48px] py-3 px-4 rounded-lg transition shadow-md cursor-pointer flex items-center justify-center">
                     Generate QR Code 📷
                 </button>
-                <div id="qr-result-box" class="mt-4 flex flex-col items-center justify-center p-4 bg-gray-50 border border-gray-200 rounded-lg hidden">
-                    <img id="qr-image" src="" alt="QR Code" class="shadow-md rounded border bg-white p-2">
-                    <p class="text-xs text-gray-400 mt-2">Right click or hold image to save</p>
+                <div id="qr-result-box" class="mt-4 flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-lg hidden">
+                    <img id="qr-image" src="" alt="QR Code" class="shadow-md rounded border border-gray-200 dark:border-gray-700 bg-white p-2">
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">Right click or hold image to save</p>
                 </div>
             </div>
 
             <div id="tool-case" class="tool-content space-y-4 hidden">
                 <div>
-                    <h2 class="text-2xl font-bold text-gray-900">Text Case Converter</h2>
-                    <p class="text-sm text-gray-500">Quickly format headings or taglines into different styles.</p>
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Text Case Converter</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Quickly format headings or taglines into different styles.</p>
                 </div>
-                <textarea id="case-input" rows="4" placeholder="Enter your text here..." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none resize-none"></textarea>
-                <div class="grid grid-cols-3 gap-2">
-                    <button data-case="upper" class="case-btn bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-3 rounded text-sm transition cursor-pointer">UPPERCASE</button>
-                    <button data-case="lower" class="case-btn bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-3 rounded text-sm transition cursor-pointer">lowercase</button>
-                    <button data-case="title" class="case-btn bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-3 rounded text-sm transition cursor-pointer">Title Case</button>
+                <textarea id="case-input" rows="4" placeholder="Enter your text here..." class="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none resize-none"></textarea>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <button data-case="upper" class="case-btn bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-white font-medium py-3 px-3 min-h-[48px] rounded text-sm transition cursor-pointer">UPPERCASE</button>
+                    <button data-case="lower" class="case-btn bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-white font-medium py-3 px-3 min-h-[48px] rounded text-sm transition cursor-pointer">lowercase</button>
+                    <button data-case="title" class="case-btn bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-white font-medium py-3 px-3 min-h-[48px] rounded text-sm transition cursor-pointer">Title Case</button>
                 </div>
-                <button id="copy-case-btn" class="w-full mt-2 bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium py-2 rounded transition hidden">Copy Processed Text 📋</button>
+                <button id="copy-case-btn" class="w-full mt-2 bg-gray-800 hover:bg-gray-900 dark:bg-gray-200 dark:hover:bg-white text-white dark:text-gray-950 text-sm font-medium min-h-[48px] py-2 rounded transition hidden">Copy Processed Text 📋</button>
             </div>
 
             <div id="tool-slug" class="tool-content space-y-4 hidden">
                 <div>
-                    <h2 class="text-2xl font-bold text-gray-900">URL Slug Generator</h2>
-                    <p class="text-sm text-gray-500">Transform article titles or link descriptors into clean web slugs.</p>
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">URL Slug Generator</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Transform article titles or link descriptors into clean web slugs.</p>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Enter post title:</label>
-                    <input type="text" id="slug-input" placeholder="10 Simple Marketing Tools For 2026!" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    <label for="slug-input" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Enter post title:</label>
+                    <input type="text" id="slug-input" placeholder="10 Simple Marketing Tools For 2026!" class="w-full min-h-[48px] px-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                 </div>
-                <button id="action-generate-slug" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition shadow-md cursor-pointer">
+                <button id="action-generate-slug" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold min-h-[48px] py-3 px-4 rounded-lg transition shadow-md cursor-pointer flex items-center justify-center">
                     Make Web Slug 🔗
                 </button>
                 <div class="mt-4 relative">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Generated Slug:</label>
-                    <input type="text" id="slug-output" readonly class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-indigo-600 font-mono text-sm pr-20">
-                    <button id="copy-slug-btn" class="absolute top-8 right-3 bg-white border border-gray-200 shadow-sm hover:bg-gray-50 text-xs px-2.5 py-1 rounded-md transition font-medium text-gray-600">Copy</button>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Generated Slug:</label>
+                    <input type="text" id="slug-output" readonly class="w-full min-h-[48px] px-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-lg text-indigo-600 dark:text-indigo-400 font-mono text-sm pr-20">
+                    <button id="copy-slug-btn" class="absolute top-8 right-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 text-xs px-3 py-1.5 min-h-[32px] rounded-md transition font-medium text-gray-600 dark:text-gray-300">Copy</button>
                 </div>
             </div>
 
         </section>
     </main>
 
-    <footer class="bg-white border-t border-gray-200 py-4 text-center text-xs text-gray-500 mt-6">
+    <footer class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 py-4 text-center text-xs text-gray-500 dark:text-gray-400 mt-6 transition-colors duration-200">
         &copy; 2026 CreatorBox Tools Hub. All rights reserved. Keep creating!
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
+            // DARK MODE THEME TOGGLE CONTROLLER
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            themeToggleBtn.addEventListener('click', () => {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+
             // UI NOTIFICATION SYSTEM (Replaces destructive window.alerts)
             function showToast(message) {
                 const toast = document.getElementById('toast-notification');
@@ -226,24 +273,90 @@
                 document.body.removeChild(textArea);
             }
 
-            // TAB MANAGER
+            // ACTIVE TAB MANAGER
+            let currentActiveTool = 'caption';
             const triggers = document.querySelectorAll('.tool-trigger');
+            
+            function switchTool(selectedTool) {
+                currentActiveTool = selectedTool;
+                document.querySelectorAll('.tool-content').forEach(el => el.classList.add('hidden'));
+                
+                const targetToolEl = document.getElementById(`tool-${selectedTool}`);
+                if(targetToolEl) targetToolEl.classList.remove('hidden');
+
+                triggers.forEach(btn => {
+                    const id = btn.getAttribute('data-tool');
+                    if(id === selectedTool) {
+                        btn.className = "tool-trigger w-full text-left px-4 py-3 min-h-[48px] rounded-lg font-medium text-sm transition bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-400 flex items-center justify-between";
+                    } else {
+                        btn.className = "tool-trigger w-full text-left px-4 py-3 min-h-[48px] rounded-lg font-medium text-sm transition text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-between";
+                    }
+                });
+            }
+
             triggers.forEach(trigger => {
                 trigger.addEventListener('click', (e) => {
-                    const selectedTool = e.target.getAttribute('data-tool');
-                    
-                    document.querySelectorAll('.tool-content').forEach(el => el.classList.add('hidden'));
-                    document.getElementById(`tool-${selectedTool}`).classList.remove('hidden');
-
-                    triggers.forEach(btn => {
-                        const id = btn.getAttribute('data-tool');
-                        if(id === selectedTool) {
-                            btn.className = "tool-trigger w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition bg-indigo-50 text-indigo-700";
-                        } else {
-                            btn.className = "tool-trigger w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100";
-                        }
-                    });
+                    const selectedTool = e.currentTarget.getAttribute('data-tool');
+                    switchTool(selectedTool);
                 });
+            });
+
+            // POWER USER HOTKEYS / KEYBOARD SHORTCUTS
+            document.addEventListener('keydown', (e) => {
+                const activeEl = document.activeElement;
+                const isTyping = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.isContentEditable);
+
+                // 1. Switch Tools with numerical values (1-6) when user is not focused on an input field
+                if (!isTyping && e.key >= '1' && e.key <= '6') {
+                    e.preventDefault();
+                    const toolsMap = ['caption', 'hashtag', 'counter', 'qr', 'case', 'slug'];
+                    const targetTool = toolsMap[parseInt(e.key) - 1];
+                    if (targetTool) switchTool(targetTool);
+                }
+
+                // 2. Global Clear input state via "Escape"
+                if (e.key === 'Escape') {
+                    if (isTyping) {
+                        activeEl.blur(); // Escape focus setup
+                    }
+                    // Clear fields dynamically according to the visible interface state
+                    const container = document.getElementById(`tool-${currentActiveTool}`);
+                    if (container) {
+                        const targets = container.querySelectorAll('input, textarea');
+                        targets.forEach(input => {
+                            if (!input.hasAttribute('readonly')) {
+                                input.value = '';
+                                // Trigger dynamic input event reset if configured (e.g., text counter layout)
+                                input.dispatchEvent(new Event('input'));
+                            }
+                        });
+                        showToast('Inputs cleared! 🧹');
+                    }
+                }
+
+                // 3. Smart Ctrl/Cmd + C Copy Result Capture Handling
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'c') {
+                    // Fall back to native selection mechanism if text highlight is found
+                    if (window.getSelection().toString().trim() !== "") {
+                        return; 
+                    }
+                    
+                    let dataToCopy = "";
+                    if (currentActiveTool === 'caption') dataToCopy = document.getElementById('caption-output').value;
+                    else if (currentActiveTool === 'hashtag') {
+                        const tags = Array.from(document.querySelectorAll('#hashtag-output span')).map(el => el.innerText);
+                        dataToCopy = tags.join(' ');
+                    }
+                    else if (currentActiveTool === 'counter') dataToCopy = document.getElementById('counter-input').value;
+                    else if (currentActiveTool === 'qr') dataToCopy = document.getElementById('qr-input').value;
+                    else if (currentActiveTool === 'case') dataToCopy = document.getElementById('case-input').value;
+                    else if (currentActiveTool === 'slug') dataToCopy = document.getElementById('slug-output').value;
+
+                    if (dataToCopy.trim()) {
+                        e.preventDefault();
+                        copyToClipboard(dataToCopy);
+                    }
+                }
             });
 
             // TOOL 1: CAPTION GENERATOR
@@ -276,7 +389,7 @@
                 outputDiv.innerHTML = '';
                 baseTags.forEach(tag => {
                     const badge = document.createElement('span');
-                    badge.className = "bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-1.5 rounded cursor-pointer hover:bg-indigo-200 transition";
+                    badge.className = "bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300 text-xs font-semibold px-3 py-2 rounded cursor-pointer hover:bg-indigo-200 dark:hover:bg-indigo-900 transition min-h-[36px] flex items-center";
                     badge.innerText = tag;
                     badge.addEventListener('click', () => copyToClipboard(tag));
                     outputDiv.appendChild(badge);
@@ -296,7 +409,7 @@
                 const xElement = document.getElementById('x-limit');
                 xElement.innerText = xLeft;
                 
-                xElement.className = xLeft < 0 ? "text-xl font-bold text-red-600" : "text-xl font-bold text-green-600";
+                xElement.className = xLeft < 0 ? "text-xl font-bold text-red-600 dark:text-red-400" : "text-xl font-bold text-green-600 dark:text-green-400";
             });
 
             // TOOL 4: QR CODE GENERATOR
@@ -318,7 +431,7 @@
             const copyCaseBtn = document.getElementById('copy-case-btn');
             document.querySelectorAll('.case-btn').forEach(button => {
                 button.addEventListener('click', (e) => {
-                    const type = e.target.getAttribute('data-case');
+                    const type = e.currentTarget.getAttribute('data-case');
                     const inputField = document.getElementById('case-input');
                     let text = inputField.value;
                     
