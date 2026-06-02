@@ -10,8 +10,23 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     
     <script src="https://quge5.com/88/tag.min.js" data-zone="245454" async data-cfasync="false"></script>
+
+    <style>
+        /* Mobile optimization: Prevent text selection highlighting across interface wrappers */
+        body {
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        input, textarea {
+            -webkit-user-select: text;
+            user-select: text;
+        }
+    </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
+
+    <div id="toast-notification" class="fixed bottom-5 right-5 bg-gray-900 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-xl transition-all duration-300 opacity-0 transform translate-y-2 pointer-events-none z-50"></div>
 
     <header class="bg-white shadow-sm py-3 px-6 flex justify-between items-center border-b border-gray-100">
         <a href="#" class="flex items-center gap-2">
@@ -24,12 +39,12 @@
         
         <aside class="lg:col-span-1 bg-white p-4 rounded-xl shadow-sm h-fit space-y-2">
             <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Available Tools</h2>
-            <button onclick="switchTool('caption')" id="btn-caption" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition bg-indigo-50 text-indigo-700">✍️ Caption Generator</button>
-            <button onclick="switchTool('hashtag')" id="btn-hashtag" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100">#️ Hashtag Finder</button>
-            <button onclick="switchTool('counter')" id="btn-counter" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100">📊 Character Counter</button>
-            <button onclick="switchTool('qr')" id="btn-qr" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100">📷 QR Code Generator</button>
-            <button onclick="switchTool('case')" id="btn-case" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100">🔤 Text Case Converter</button>
-            <button onclick="switchTool('slug')" id="btn-slug" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100">🔗 URL Slug Generator</button>
+            <button data-tool="caption" id="btn-caption" class="tool-trigger w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition bg-indigo-50 text-indigo-700">✍️ Caption Generator</button>
+            <button data-tool="hashtag" id="btn-hashtag" class="tool-trigger w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100">#️ Hashtag Finder</button>
+            <button data-tool="counter" id="btn-counter" class="tool-trigger w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100">📊 Character Counter</button>
+            <button data-tool="qr" id="btn-qr" class="tool-trigger w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100">📷 QR Code Generator</button>
+            <button data-tool="case" id="btn-case" class="tool-trigger w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100">🔤 Text Case Converter</button>
+            <button data-tool="slug" id="btn-slug" class="tool-trigger w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100">🔗 URL Slug Generator</button>
             
             <div class="pt-6 flex justify-center">
                 <div class="bg-indigo-50 text-indigo-900 text-xs p-4 rounded-lg border border-indigo-100 text-center w-full">
@@ -58,12 +73,13 @@
                         <option value="informative">Informative</option>
                     </select>
                 </div>
-                <button onclick="triggerAction(generateCaption)" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition shadow-md cursor-pointer">
+                <button id="action-generate-caption" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition shadow-md cursor-pointer">
                     Generate Caption ✨
                 </button>
-                <div class="mt-4">
+                <div class="mt-4 relative">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Result:</label>
                     <textarea id="caption-output" readonly rows="4" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg resize-none text-gray-700" placeholder="Your generated caption will appear here..."></textarea>
+                    <button id="copy-caption-btn" class="absolute top-8 right-3 bg-white border border-gray-200 shadow-sm hover:bg-gray-50 text-xs px-2.5 py-1 rounded-md transition font-medium text-gray-600">Copy</button>
                 </div>
             </div>
 
@@ -76,11 +92,11 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">Enter your niche keyword:</label>
                     <input type="text" id="hashtag-keyword" placeholder="e.g., fitness, travel, tech" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                 </div>
-                <button onclick="triggerAction(findHashtags)" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition shadow-md cursor-pointer">
+                <button id="action-find-hashtags" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition shadow-md cursor-pointer">
                     Find Hashtags 🔍
                 </button>
                 <div class="mt-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Trending Tags:</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Trending Tags (Click to copy individual tag):</label>
                     <div id="hashtag-output" class="p-4 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 min-h-[100px] flex flex-wrap gap-2 items-center justify-center">
                         <span class="text-sm text-gray-400">Hashtags will generate here...</span>
                     </div>
@@ -92,7 +108,7 @@
                     <h2 class="text-2xl font-bold text-gray-900">Smart Text Counter</h2>
                     <p class="text-sm text-gray-500">Check limits for Twitter/X, Instagram, and LinkedIn.</p>
                 </div>
-                <textarea id="counter-input" oninput="countText()" rows="6" placeholder="Type or paste your content here..." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none resize-none"></textarea>
+                <textarea id="counter-input" rows="6" placeholder="Type or paste your content here..." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none resize-none"></textarea>
                 <div class="grid grid-cols-3 gap-4 text-center">
                     <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
                         <div id="char-count" class="text-xl font-bold text-indigo-600">0</div>
@@ -118,7 +134,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">Enter URL or text:</label>
                     <input type="text" id="qr-input" placeholder="https://example.com/your-profile" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                 </div>
-                <button onclick="triggerAction(generateQRCode)" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition shadow-md cursor-pointer">
+                <button id="action-generate-qr" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition shadow-md cursor-pointer">
                     Generate QR Code 📷
                 </button>
                 <div id="qr-result-box" class="mt-4 flex flex-col items-center justify-center p-4 bg-gray-50 border border-gray-200 rounded-lg hidden">
@@ -134,10 +150,11 @@
                 </div>
                 <textarea id="case-input" rows="4" placeholder="Enter your text here..." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none resize-none"></textarea>
                 <div class="grid grid-cols-3 gap-2">
-                    <button onclick="triggerAction(() => convertCase('upper'))" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-3 rounded text-sm transition cursor-pointer">UPPERCASE</button>
-                    <button onclick="triggerAction(() => convertCase('lower'))" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-3 rounded text-sm transition cursor-pointer">lowercase</button>
-                    <button onclick="triggerAction(() => convertCase('title'))" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-3 rounded text-sm transition cursor-pointer">Title Case</button>
+                    <button data-case="upper" class="case-btn bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-3 rounded text-sm transition cursor-pointer">UPPERCASE</button>
+                    <button data-case="lower" class="case-btn bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-3 rounded text-sm transition cursor-pointer">lowercase</button>
+                    <button data-case="title" class="case-btn bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-3 rounded text-sm transition cursor-pointer">Title Case</button>
                 </div>
+                <button id="copy-case-btn" class="w-full mt-2 bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium py-2 rounded transition hidden">Copy Processed Text 📋</button>
             </div>
 
             <div id="tool-slug" class="tool-content space-y-4 hidden">
@@ -149,12 +166,13 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">Enter post title:</label>
                     <input type="text" id="slug-input" placeholder="10 Simple Marketing Tools For 2026!" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                 </div>
-                <button onclick="triggerAction(generateSlug)" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition shadow-md cursor-pointer">
+                <button id="action-generate-slug" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition shadow-md cursor-pointer">
                     Make Web Slug 🔗
                 </button>
-                <div class="mt-4">
+                <div class="mt-4 relative">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Generated Slug:</label>
-                    <input type="text" id="slug-output" readonly class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-indigo-600 font-mono text-sm">
+                    <input type="text" id="slug-output" readonly class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-indigo-600 font-mono text-sm pr-20">
+                    <button id="copy-slug-btn" class="absolute top-8 right-3 bg-white border border-gray-200 shadow-sm hover:bg-gray-50 text-xs px-2.5 py-1 rounded-md transition font-medium text-gray-600">Copy</button>
                 </div>
             </div>
 
@@ -166,134 +184,181 @@
     </footer>
 
     <script>
-        // Tab switching logic
-        function switchTool(toolId) {
-            document.querySelectorAll('.tool-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`tool-${toolId}`).classList.remove('hidden');
+        document.addEventListener('DOMContentLoaded', () => {
             
-            // Adjust active tab styles
-            ['caption', 'hashtag', 'counter', 'qr', 'case', 'slug'].forEach(id => {
-                const btn = document.getElementById(`btn-${id}`);
-                if(btn) {
-                    if(id === toolId) {
-                        btn.className = "w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition bg-indigo-50 text-indigo-700";
-                    } else {
-                        btn.className = "w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100";
-                    }
+            // UI NOTIFICATION SYSTEM (Replaces destructive window.alerts)
+            function showToast(message) {
+                const toast = document.getElementById('toast-notification');
+                toast.innerText = message;
+                toast.classList.remove('opacity-0', 'translate-y-2', 'pointer-events-none');
+                toast.classList.add('opacity-100', 'translate-y-0');
+                
+                setTimeout(() => {
+                    toast.classList.remove('opacity-100', 'translate-y-0');
+                    toast.classList.add('opacity-0', 'translate-y-2', 'pointer-events-none');
+                }, 2500);
+            }
+
+            // SAFARI/WEBVIEW CLIPBOARD COMPATIBILITY WRAPPER
+            function copyToClipboard(text) {
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(text)
+                        .then(() => showToast('Copied to clipboard! 📋'))
+                        .catch(() => fallbackCopy(text));
+                } else {
+                    fallbackCopy(text);
                 }
+            }
+
+            function fallbackCopy(text) {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed"; 
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showToast('Copied to clipboard! 📋');
+                } catch (err) {
+                    showToast('Failed to copy. Please manually copy the text.');
+                }
+                document.body.removeChild(textArea);
+            }
+
+            // TAB MANAGER
+            const triggers = document.querySelectorAll('.tool-trigger');
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', (e) => {
+                    const selectedTool = e.target.getAttribute('data-tool');
+                    
+                    document.querySelectorAll('.tool-content').forEach(el => el.classList.add('hidden'));
+                    document.getElementById(`tool-${selectedTool}`).classList.remove('hidden');
+
+                    triggers.forEach(btn => {
+                        const id = btn.getAttribute('data-tool');
+                        if(id === selectedTool) {
+                            btn.className = "tool-trigger w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition bg-indigo-50 text-indigo-700";
+                        } else {
+                            btn.className = "tool-trigger w-full text-left px-3 py-2.5 rounded-lg font-medium text-sm transition text-gray-600 hover:bg-gray-100";
+                        }
+                    });
+                });
             });
-        }
 
-        // Action wrapper for monetization extensions
-        function triggerAction(callbackFunction) {
-            callbackFunction();
-        }
-
-        // TOOL 1: Caption Logic
-        function generateCaption() {
-            const topic = document.getElementById('caption-topic').value || "Routine";
-            const tone = document.getElementById('caption-tone').value;
-            const output = document.getElementById('caption-output');
-            
-            const templates = {
-                witty: [`Honestly, just putting 100% of my energy into ${topic} today. ☕✨`, `Plot twist: ${topic} actually worked out perfectly.`, `Current status: crushing ${topic}. Proceed with caution.`],
-                motivational: [`Consistency is key. Focus your mind on ${topic} and watch things change. 🙌`, `The grind never stops. Today's mission: ${topic}. Let's get it.`, `Small steps daily lead to big changes. Start with ${topic}.`],
-                informative: [`Did you know? ${topic} is one of the most effective strategies for growth right now.`, `Breaking down ${topic} into simple, actionable steps for beginners.`, `Here is exactly what you need to know about ${topic} this week.`]
-            };
-
-            const randomIdx = Math.floor(Math.random() * 3);
-            output.value = templates[tone][randomIdx];
-        }
-
-        // TOOL 2: Hashtag Logic
-        function findHashtags() {
-            const keyword = document.getElementById('hashtag-keyword').value.trim().toLowerCase() || "marketing";
-            const outputDiv = document.getElementById('hashtag-output');
-            
-            const baseTags = [`#${keyword}`, `#${keyword}life`, `#${keyword}community`, `#trending`, `#viral`, `#explorepage`, `#creators`, `#fyp`];
-            
-            outputDiv.innerHTML = '';
-            baseTags.forEach(tag => {
-                const badge = document.createElement('span');
-                badge.className = "bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-1.5 rounded cursor-pointer hover:bg-indigo-200 transition";
-                badge.innerText = tag;
-                badge.onclick = () => {
-                    navigator.clipboard.writeText(tag);
-                    alert(`Copied: ${tag}`);
+            // TOOL 1: CAPTION GENERATOR
+            document.getElementById('action-generate-caption').addEventListener('click', () => {
+                const topic = document.getElementById('caption-topic').value.trim() || "Routine";
+                const tone = document.getElementById('caption-tone').value;
+                const output = document.getElementById('caption-output');
+                
+                const templates = {
+                    witty: [`Honestly, just putting 100% of my energy into ${topic} today. ☕✨`, `Plot twist: ${topic} actually worked out perfectly.`, `Current status: crushing ${topic}. Proceed with caution.`],
+                    motivational: [`Consistency is key. Focus your mind on ${topic} and watch things change. 🙌`, `The grind never stops. Today's mission: ${topic}. Let's get it.`, `Small steps daily lead to big changes. Start with ${topic}.`],
+                    informative: [`Did you know? ${topic} is one of the most effective strategies for growth right now.`, `Breaking down ${topic} into simple, actionable steps for beginners.`, `Here is exactly what you need to know about ${topic} this week.`]
                 };
-                outputDiv.appendChild(badge);
+
+                const randomIdx = Math.floor(Math.random() * 3);
+                output.value = templates[tone][randomIdx];
             });
-        }
 
-        // TOOL 3: Counter Logic
-        function countText() {
-            const text = document.getElementById('counter-input').value;
-            const charCount = text.length;
-            const wordCount = text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
-            
-            document.getElementById('char-count').innerText = charCount;
-            document.getElementById('word-count').innerText = wordCount;
-            
-            const xLeft = 280 - charCount;
-            const xElement = document.getElementById('x-limit');
-            xElement.innerText = xLeft;
-            
-            if(xLeft < 0) {
-                xElement.className = "text-xl font-bold text-red-600";
-            } else {
-                xElement.className = "text-xl font-bold text-green-600";
-            }
-        }
+            document.getElementById('copy-caption-btn').addEventListener('click', () => {
+                const val = document.getElementById('caption-output').value;
+                if(val) copyToClipboard(val);
+            });
 
-        // TOOL 4: QR Code Generator Logic
-        function generateQRCode() {
-            const data = document.getElementById('qr-input').value.trim();
-            const resultBox = document.getElementById('qr-result-box');
-            const qrImage = document.getElementById('qr-image');
-            
-            if(!data) {
-                alert("Please enter a link or text first!");
-                return;
-            }
-            
-            qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=170x170&data=${encodeURIComponent(data)}`;
-            resultBox.classList.remove('hidden');
-        }
+            // TOOL 2: HASHTAG FINDER
+            document.getElementById('action-find-hashtags').addEventListener('click', () => {
+                const keyword = document.getElementById('hashtag-keyword').value.trim().toLowerCase() || "marketing";
+                const outputDiv = document.getElementById('hashtag-output');
+                const baseTags = [`#${keyword}`, `#${keyword}life`, `#${keyword}community`, `#trending`, `#viral`, `#explorepage`, `#creators`, `#fyp`];
+                
+                outputDiv.innerHTML = '';
+                baseTags.forEach(tag => {
+                    const badge = document.createElement('span');
+                    badge.className = "bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-1.5 rounded cursor-pointer hover:bg-indigo-200 transition";
+                    badge.innerText = tag;
+                    badge.addEventListener('click', () => copyToClipboard(tag));
+                    outputDiv.appendChild(badge);
+                });
+            });
 
-        // TOOL 5: Text Case Converter Logic
-        function convertCase(type) {
-            const inputField = document.getElementById('case-input');
-            let text = inputField.value;
-            
-            if(!text.trim()) return;
+            // TOOL 3: CHARACTER COUNTER
+            document.getElementById('counter-input').addEventListener('input', (e) => {
+                const text = e.target.value;
+                const charCount = text.length;
+                const wordCount = text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
+                
+                document.getElementById('char-count').innerText = charCount;
+                document.getElementById('word-count').innerText = wordCount;
+                
+                const xLeft = 280 - charCount;
+                const xElement = document.getElementById('x-limit');
+                xElement.innerText = xLeft;
+                
+                xElement.className = xLeft < 0 ? "text-xl font-bold text-red-600" : "text-xl font-bold text-green-600";
+            });
 
-            if(type === 'upper') {
-                inputField.value = text.toUpperCase();
-            } else if(type === 'lower') {
-                inputField.value = text.toLowerCase();
-            } else if(type === 'title') {
-                inputField.value = text.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
-            }
-        }
+            // TOOL 4: QR CODE GENERATOR
+            document.getElementById('action-generate-qr').addEventListener('click', () => {
+                const data = document.getElementById('qr-input').value.trim();
+                const resultBox = document.getElementById('qr-result-box');
+                const qrImage = document.getElementById('qr-image');
+                
+                if(!data) {
+                    showToast("Please enter a link or text first!");
+                    return;
+                }
+                
+                qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=170x170&data=${encodeURIComponent(data)}`;
+                resultBox.classList.remove('hidden');
+            });
 
-        // TOOL 6: Slug Generator Logic
-        function generateSlug() {
-            const input = document.getElementById('slug-input').value;
-            const output = document.getElementById('slug-output');
-            
-            if(!input.trim()) {
-                alert("Please type a title description first!");
-                return;
-            }
+            // TOOL 5: CASE CONVERTER
+            const copyCaseBtn = document.getElementById('copy-case-btn');
+            document.querySelectorAll('.case-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const type = e.target.getAttribute('data-case');
+                    const inputField = document.getElementById('case-input');
+                    let text = inputField.value;
+                    
+                    if(!text.trim()) return;
 
-            const slug = input.toLowerCase()
-                              .trim()
-                              .replace(/[^\w\s-]/g, '')
-                              .replace(/[\s_-]+/g, '-')
-                              .replace(/^-+|-+$/g, '');
-            
-            output.value = slug;
-        }
+                    if(type === 'upper') inputField.value = text.toUpperCase();
+                    if(type === 'lower') inputField.value = text.toLowerCase();
+                    if(type === 'title') inputField.value = text.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+                    
+                    copyCaseBtn.classList.remove('hidden');
+                });
+            });
+
+            copyCaseBtn.addEventListener('click', () => {
+                const val = document.getElementById('case-input').value;
+                if(val) copyToClipboard(val);
+            });
+
+            // TOOL 6: SLUG GENERATOR
+            document.getElementById('action-generate-slug').addEventListener('click', () => {
+                const input = document.getElementById('slug-input').value;
+                const output = document.getElementById('slug-output');
+                
+                if(!input.trim()) {
+                    showToast("Please type a title description first!");
+                    return;
+                }
+
+                output.value = input.toLowerCase()
+                                    .trim()
+                                    .replace(/[^\w\s-]/g, '')
+                                    .replace(/[\s_-]+/g, '-')
+                                    .replace(/^-+|-+$/g, '');
+            });
+
+            document.getElementById('copy-slug-btn').addEventListener('click', () => {
+                const val = document.getElementById('slug-output').value;
+                if(val) copyToClipboard(val);
+            });
+        });
     </script>
 </body>
 </html>
